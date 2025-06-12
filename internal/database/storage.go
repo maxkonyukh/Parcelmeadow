@@ -52,6 +52,17 @@ func (s *InMemoryStorage) GetTodayParcels() ([]Parcel, error) {
 	return todayParcels, nil
 }
 
+func (s *InMemoryStorage) GetTodayRoutes() ([]Route, error) {
+	var todayRoutes []Route
+	for _, route := range s.routes {
+		if isValidRoute(route) {
+			todayRoutes = append(todayRoutes, route)
+		}
+	}
+
+	return todayRoutes, nil
+}
+
 func (s *InMemoryStorage) setRouteForParcel(parcel Parcel) {
 	nextRouteName := s.getNextRouteName()
 	if route, routeExists := s.routes[nextRouteName]; routeExists {
@@ -77,17 +88,6 @@ func (s *InMemoryStorage) setRouteForParcel(parcel Parcel) {
 			},
 		}
 	}
-}
-
-func (s *InMemoryStorage) GetTodayRoutes() ([]Route, error) {
-	var todayRoutes []Route
-	for _, route := range s.routes {
-		if isValidRoute(route) {
-			todayRoutes = append(todayRoutes, route)
-		}
-	}
-
-	return todayRoutes, nil
 }
 
 func (s *InMemoryStorage) getNextRouteName() RouteName {
