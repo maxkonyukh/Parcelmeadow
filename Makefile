@@ -12,10 +12,10 @@ test:
 .PHONY: generate
 generate: swagger.yaml
 	rm -rf internal/api/generated/models
-	rm -rf internal/api/generated/togglr/operations
-	rm -rf internal/api/generated/togglr/doc.go
-	rm -rf internal/api/generated/togglr/embedded_spec.go
-	rm -rf internal/api/generated/togglr/server.go
+	rm -rf internal/api/generated/restapi/operations
+	rm -rf internal/api/generated/restapi/doc.go
+	rm -rf internal/api/generated/restapi/embedded_spec.go
+	rm -rf internal/api/generated/restapi/server.go
 	swagger generate server -f swagger.yaml -t ./internal/api/generated --main-package ../../../../cmd/ -A parcelmeadow
 
 .PHONY: generate-mocks
