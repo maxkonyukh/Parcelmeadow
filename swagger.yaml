@@ -1,0 +1,141 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: "parcelmeadow API"
+  description: |-
+    This API contains services related to fetching information about local delivery in Parcelmeadow.
+basePath: /
+host: localhost:9090
+
+paths:
+  /v1/parcels:
+    get:
+      description: Fetches today's parcels.
+      summary: parcels
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/GetTodayParcelsV1Response'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+    post:
+      description: Creates a parcel.
+      summary: parcels
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/CreateParcelV1Request'
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  /v1/parcels/routes:
+    get:
+      description: Fetches the routes for today's deliveries.
+      summary: routes
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/GetTodayRoutesV1Response'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+parameters:
+  CreateParcelV1Request:
+    in: body
+    name: CreateParcelV1Request
+    description: Request to create a new parcel
+    schema:
+      $ref: '#/definitions/ParcelV1'
+
+definitions:
+  GetTodayParcelsV1Response:
+    description: Response containing today's parcels
+    type: object
+    properties:
+      parcels:
+        type: array
+        items:
+          $ref: '#/definitions/ParcelV1'
+    required:
+      - parcels
+  GetTodayRoutesV1Response:
+    description: Response containing today's routes
+    type: object
+    properties:
+      routes:
+        type: array
+        items:
+          $ref: '#/definitions/RouteV1'
+    required:
+      - routes
+  RouteV1:
+    description: Represents a delivery route in the parcelmeadow system
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the route
+        example: "R001"
+      stops:
+        type: array
+        items:
+          $ref: '#/definitions/StopV1'
+        description: List of stops for this route
+  StopV1:
+    description: Represents a stop in a delivery route
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the stop
+        example: "S001"
+      address:
+        type: string
+        description: Address of the stop
+        example: "456 Elm St"
+      parcels:
+        type: array
+        items:
+          $ref: '#/definitions/ParcelV1'
+        description: List of parcels to be delivered at this stop
+  ParcelV1:
+    description: Represents a parcel in the parcelmeadow system
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the parcel
+        example: "P001"
+      status:
+        type: string
+        description: Current status of the parcel
+        example: "in-transit"
+      weight:
+        type: number
+        format: float
+        description: Weight of the parcel in kilograms
+        example: 2.3
+      postCode:
+        type: string
+        description: Postal code for the delivery address
+        example: "0465"
+      address:
+        type: string
+        description: Delivery address for the parcel
+        example: "123 Main St"
